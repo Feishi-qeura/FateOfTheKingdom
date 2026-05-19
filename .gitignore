@@ -18,6 +18,7 @@ Saved/
 
 # Visual Studio Code files
 .vscode/
+.vsconfig
 
 # Rider / JetBrains local user state
 .idea/.idea.*/
