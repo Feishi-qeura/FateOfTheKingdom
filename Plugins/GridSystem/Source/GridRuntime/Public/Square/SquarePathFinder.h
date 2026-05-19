@@ -27,6 +27,7 @@ public:
 	virtual ~USquarePathFinder() {};
 
 	virtual int32 GetCost_Implementation(UGrid* From, UGrid* To) override;
+	virtual bool IsReachable_Implementation(UGrid* Start, UGrid* Dest) override;
 	// 寻路，返回起点到终点的路径
 	bool FindPath(const FGridPathfindingRequest& InRequest, TArray<UGrid*>& OutPath);
 

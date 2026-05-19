@@ -145,7 +145,7 @@ void AGridManager::SetGridDataTable(UDataTable* InTileDataTable)
 FGridData* AGridManager::GetGridDataFromTable(FName GridID) const
 {
 	if (!TileDataTable) return nullptr;
-	return TileDataTable->FindRow<FGridData>(GridID, TEXT(""));
+	return TileDataTable->FindRow<FGridData>(GridID, TEXT("GetGridDataFromTable Failed"));
 }
 void AGridManager::RandomizeTileIDs(const TArray<UGrid*>& AllGrids, const TArray<FName>& TileIDs)
 {

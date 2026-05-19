@@ -66,16 +66,15 @@ void UGridSubsystem::InitGridManager(
 		UE_LOG(LogTemp, Log, TEXT("GridManager Spawn 成功"));
 	}
 	
-	//TestPathFinder();
 }
 
-TArray<FVector> UGridSubsystem::DoPathFind(AActor* actor, FVector endPos)
+TArray<FVector> UGridSubsystem::DoPathFind(AActor* actor, FVector endPos, int32 MaxCost)
 {
 	FGridPathfindingRequest Request;
 	Request.Sender = actor;
 	Request.Start = GridManager->GetGridByPosition(actor->GetActorLocation());
 	Request.Destination = GridManager->GetGridByPosition(endPos);
-	Request.MaxCost = -1;      // -1 表示不限制移动力
+	Request.MaxCost = MaxCost;      // -1 表示不限制移动力
 	Request.MaxSearchStep = 1000;
 	TArray<UGrid*> GridList;
 	bool bFound = SquarePathFinder->FindPath(Request, GridList);
@@ -112,6 +111,7 @@ void UGridSubsystem::TestPathFinder()
 	Request.MaxCost = -1;      // -1 表示不限制移动力
 	Request.MaxSearchStep = 1000;
 	TArray<UGrid*> Path;
+	UE_LOG(LogTemp, Warning, TEXT("TestPathFinder"));
 	bool bFound = SquarePathFinder->FindPath(Request, Path);
 	if (bFound)
 	{
@@ -135,11 +135,14 @@ void UGridSubsystem::InitMapGrid(FBox MapBound)
 	UE_LOG(LogTemp, Log, TEXT("根据坐标初始化的格子数量: %d"), GridsToShow.Num());
 	TArray<FName> TileIDs = { TEXT("Grid0"), TEXT("Grid1")};
 	GridManager->RandomizeTileIDs(GridsToShow, TileIDs);
+	TestPathFinder();
+	int i = 0;
 	for (UGrid* Grid : GridsToShow)
 	{
 		Grid->SetVisibility(true);
+		//Grid->GridInfo->HitResult.bBlockingHit = true; // TODO:这玩意是检测地面的，测试阶段写死
 		DrawGridBorders(Grid, GridManager->GetGridSize(), 10.0f);
-		//UE_LOG(LogTemp, Log, TEXT("这格子 %d: %s %s"),i++, *Grid->GetCoord().ToString(), Grid->GetVisibility()? TEXT("true"):TEXT("false"));
+		//UE_LOG(LogTemp, Log, TEXT("这格子 %d: %s %s"),i++, *Grid->GetCoord().ToString(), *Grid->GridInfo->TileID.ToString());
 	}
 }
 
@@ -150,7 +153,7 @@ void UGridSubsystem::DrawGridBorders(UGrid* Grid, float GridSize, float ZOffset)
 	FColor Color = FColor::Green;
 	float Duration = -1.f; // 永久显示
 	FGridData* Data = GridManager->GetGridDataFromTable(Grid->GridInfo->TileID);
-	if ( Data != nullptr && Data->bPassable == false)
+	if ( Data != nullptr && Data->MoveCost == 9999)
 	{
 		Color = FColor::Red;
 	}

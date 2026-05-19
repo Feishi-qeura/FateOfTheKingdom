@@ -11,12 +11,21 @@ int32 USquarePathFinder::GetCost_Implementation(UGrid* From, UGrid* To)
     FGridData* Data = GridManager->GetGridDataFromTable(Info->TileID);
     if (!Data)
     {
-        UE_LOG(LogTemp, Error, TEXT("Data empty"));
+        UE_LOG(LogTemp, Error, TEXT("[PathFinder] Data empty ID:%s"), *Info->TileID.ToString());
+        return 1;
     }
-    if (!Data) return 1; // 没配表默认代价为1
     return Data->MoveCost;
 }
+bool USquarePathFinder::IsReachable_Implementation(UGrid* Start, UGrid* Dest)
+{
+    UGridInfo* Info = Cast<UGridInfo>(Dest->GridInfo);
+    if (!Info) return false;
 
+    FGridData* Data = GridManager->GetGridDataFromTable(Info->TileID);
+    if (!Data) return false;
+
+    return Data->bPassable; // 由数据表控制通行权限
+}
 
 bool USquarePathFinder::FindPath(const FGridPathfindingRequest& InRequest, TArray<UGrid*>& OutPath)
 {

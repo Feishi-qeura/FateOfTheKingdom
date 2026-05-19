@@ -10,8 +10,18 @@ public class FateOfTheKingdom : ModuleRules
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
 
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
-
+		
+		
+#pragma region BlackZero
+		PrivateDependencyModuleNames.AddRange(new string[]
+		{
+			"Landscape",
+			"GridEditor",
+			"GridRuntime",
+			"FlecsLibrary",
+			"FlecsSystem"
+		});
+#pragma endregion
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 		

@@ -19,7 +19,7 @@ public:
 	void InitGridManager(UDataTable* gridDataTable, float gridSize = 100.0f, FVector originPos = FVector(0, 0, 0));
 	UFUNCTION(BlueprintCallable, Category = "GridSubsytem")
 	void InitMapGrid(FBox MapBound);
-	TArray<FVector> DoPathFind(AActor* actor, FVector endPos);
+	TArray<FVector> DoPathFind(AActor* actor, FVector endPos, int32 MaxCost = -1);
 	FIntVector GetCoordByPosition(const FVector& Position);
 	// ---- USubsystem 生命周期 ----
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
