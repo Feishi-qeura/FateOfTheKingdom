@@ -11,16 +11,8 @@ public class GridRuntime : ModuleRules
             {
                 "Core",
                 "AIModule",
-            }
-        );
-
-        PrivateDependencyModuleNames.AddRange(
-            new string[]
-            {
                 "CoreUObject",
                 "Engine",
-                "Slate",
-                "SlateCore",
                 "GameplayTags",
                 "NavigationSystem",
                 "RHI",
