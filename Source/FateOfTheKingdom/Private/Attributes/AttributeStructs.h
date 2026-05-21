@@ -9,23 +9,33 @@ struct FATEOFTHEKINGDOM_API FBaseAttribute
 {
 	GENERATED_BODY()
 
+	//最大生命
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MaxHealth = 100.0f;
 
+	//当前生命
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float CurrentHealth = 100.0f;
 
+	//最大行动点
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float MaxActionPoint = 4.0f;
-
+	uint8 MaxActionPoint = 4;
+	
+	//当前行动点
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float CurrentActionPoint = 2.0f;
-
+	uint8 CurrentActionPoint = 2;
+	
+	//速度
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Speed = 80.0f;
-
+	
+	//移动距离
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MoveRange = 5.0f;
+	
+	//行动条（越接近0代表速度越快）
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float CurrentAV = 0.0f;
 };
 
 // 战斗属性
