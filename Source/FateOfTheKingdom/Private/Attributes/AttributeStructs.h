@@ -33,9 +33,10 @@ struct FATEOFTHEKINGDOM_API FBaseAttribute
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MoveRange = 5.0f;
 	
-	//行动条（越接近0代表速度越快）
+	//行动值
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float CurrentAV = 0.0f;
+	
 };
 
 // 战斗属性

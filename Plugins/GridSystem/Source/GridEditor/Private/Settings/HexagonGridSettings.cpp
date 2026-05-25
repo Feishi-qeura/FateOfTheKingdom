@@ -1,6 +1,5 @@
 #include "HexagonGridSettings.h"
 #include "Materials/MaterialInterface.h"
-#include "Materials/MaterialInstance.h"
 #include "UObject/ConstructorHelpers.h"
 
 UHexagonGridSettings::UHexagonGridSettings()
@@ -10,10 +9,10 @@ UHexagonGridSettings::UHexagonGridSettings()
 
 	GridSize = 100.f;
 
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> DecalMat(TEXT("/Grid/Materials/Hexagon/M_HexagonGrid_Normal.M_HexagonGrid_Normal"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> DecalMat(TEXT("/GridSystem/Materials/Hexagon/M_HexagonGrid_Normal.M_HexagonGrid_Normal"));
 	DecalMaterial = DecalMat.Object;
 
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> VisualizerMat(TEXT("/Grid/Materials/Hexagon/M_HexagonGrid_SensingVisualizer.M_HexagonGrid_SensingVisualizer"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> VisualizerMat(TEXT("/GridSystem/Materials/Hexagon/M_HexagonGrid_SensingVisualizer.M_HexagonGrid_SensingVisualizer"));
 	GridSensingVisualizerMaterial = VisualizerMat.Object;
 }
 

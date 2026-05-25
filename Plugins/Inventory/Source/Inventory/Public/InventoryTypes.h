@@ -45,7 +45,7 @@ struct FItemData : public FTableRowBase
 	FText ItemDescription;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Data" , meta = (DisplayName = "物品品质"))
-	EItemQuality ItemQuality;
+	EItemQuality ItemQuality = EItemQuality::None;//unreal中枚举类型务必拥有默认值
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly , Category = "Item Data", meta = (AllowedClasses = "Texture2D,MaterialInterface" , displayname = "物品图标"))
 	TObjectPtr<UObject> Image;

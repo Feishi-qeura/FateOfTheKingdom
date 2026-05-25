@@ -20,7 +20,7 @@ struct FGridData : public FTableRowBase
 	bool bPassable = true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grid")
-	GridEvent EventID;
+	GridEvent EventID = GridEvent::Fight; //初始化默认赋值，解决UnrealLink日志输出报错问题
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grid")
 	FGameplayTagContainer AllowedUnitTypes; // 哪些单位能通行
 

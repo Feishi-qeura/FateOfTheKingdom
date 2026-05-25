@@ -1,6 +1,5 @@
 #include "SquareGridSettings.h"
 #include "Materials/MaterialInterface.h"
-#include "Materials/MaterialInstance.h"
 #include "UObject/ConstructorHelpers.h"
 
 USquareGridSettings::USquareGridSettings()
@@ -9,10 +8,10 @@ USquareGridSettings::USquareGridSettings()
 
 	GridSize = 100.f;
 
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> DecalMat(TEXT("/Grid/Materials/Square/M_SquareGrid_Normal.M_SquareGrid_Normal"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> DecalMat(TEXT("/GridSystem/Materials/Square/M_SquareGrid_Normal.M_SquareGrid_Normal"));
 	DecalMaterial = DecalMat.Object;
 
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> VisualizerMat(TEXT("/Grid/Materials/Square/M_SquareGrid_SensingVisualizer.M_SquareGrid_SensingVisualizer"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> VisualizerMat(TEXT("/GridSystem/Materials/Square/M_SquareGrid_SensingVisualizer.M_SquareGrid_SensingVisualizer"));
 	GridSensingVisualizerMaterial = VisualizerMat.Object;
 }
 
