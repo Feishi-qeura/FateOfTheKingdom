@@ -19,11 +19,11 @@ struct FATEOFTHEKINGDOM_API FBaseAttribute
 
 	//最大行动点
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	uint8 MaxActionPoint = 4;
+	int32 MaxActionPoint = 4;
 	
 	//当前行动点
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	uint8 CurrentActionPoint = 2;
+	int32 CurrentActionPoint = 2;
 	
 	//速度
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -36,6 +36,10 @@ struct FATEOFTHEKINGDOM_API FBaseAttribute
 	//行动值
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float CurrentAV = 0.0f;
+	
+	//优先级
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Priority = 0;
 	
 };
 
