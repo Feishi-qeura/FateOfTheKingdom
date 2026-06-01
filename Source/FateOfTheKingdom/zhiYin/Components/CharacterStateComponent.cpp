@@ -38,6 +38,72 @@ void UCharacterStateComponent::MoveInputWASD(FVector2D Direction)
     }
 }
 
+void UCharacterStateComponent::TryAttackLookAtTarget(float MaxAttackRangeGrids)
+{
+    AActor* Owner = GetOwner();
+    APawn* OwnerPawn = Cast<APawn>(Owner);
+    if (!OwnerPawn) return;
+
+    APlayerController* PC = Cast<APlayerController>(OwnerPawn->GetController());
+    if (!PC) return;
+    
+    //检查玩家自身的行动点是否足够
+    UAttributeComponent* MyAttributes = Owner->FindComponentByClass<UAttributeComponent>();
+    if (!MyAttributes || MyAttributes->BaseAttribute.CurrentActionPoint < 1)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("【战斗拦截】行动点不足，无法攻击！"));
+        return;
+    }
+
+
+    //第一人称视线准星射线检测（寻找玩家正在看着的敌人）
+    FVector CameraLocation;
+    FRotator CameraRotation;
+    PC->GetPlayerViewPoint(CameraLocation, CameraRotation); // 获取第一人称相机视点
+
+    FVector TraceEnd = CameraLocation + (CameraRotation.Vector() * 2000.0f); // 射线向前延伸 20 米
+
+    FHitResult HitResult;
+    TArray<AActor*> ToIgnore;
+    ToIgnore.Add(Owner);
+
+    TArray<TEnumAsByte<EObjectTypeQuery>> PawnType;
+    PawnType.Add(UEngineTypes::ConvertToObjectType(ECC_Pawn)); // 只看角色
+
+    bool bHit = UKismetSystemLibrary::LineTraceSingleForObjects(
+        GetWorld(), CameraLocation, TraceEnd, PawnType, false, ToIgnore,
+        EDrawDebugTrace::None, HitResult, true
+    );
+
+    if (!bHit || !HitResult.GetActor())
+    {
+        UE_LOG(LogTemp, Warning, TEXT("【战斗拦截】准星没有对准任何目标！"));
+        return;
+    }
+
+    AActor* TargetEnemy = HitResult.GetActor();
+    
+    //基于格子距离（Grid Distance）的范围校验
+    float Distance2D = FVector::Dist2D(Owner->GetActorLocation(), TargetEnemy->GetActorLocation());
+    // 换算成格子数
+    float GridDistance = Distance2D / MoveDistance;
+    
+    int32 ActualGridRange = FMath::RoundToInt(GridDistance);
+
+    if (ActualGridRange > MaxAttackRangeGrids)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("【战斗拦截】目标太远了！当前距离 %d 格，武器范围 %f 格"), ActualGridRange, MaxAttackRangeGrids);
+        return;
+    }
+    
+    //校验通过，扣除 1 点行动点，并进入伤害结算
+    MyAttributes->BaseAttribute.CurrentActionPoint -= 1;
+    
+    UE_LOG(LogTemp, Log, TEXT("成功消耗 1 点行动点发起攻击！剩余 AP: %d"), MyAttributes->BaseAttribute.CurrentActionPoint);
+    
+    ExecuteDamage(Owner, TargetEnemy);
+}
+
 bool UCharacterStateComponent::IsGridMove(FVector2D Direction,FVector& OutTargetLoc) const
 {
     AActor* Owner = GetOwner();
@@ -102,6 +168,36 @@ bool UCharacterStateComponent::IsGridMove(FVector2D Direction,FVector& OutTarget
     // if (格子上有人) return false;
 
     return true;
+}
+
+void UCharacterStateComponent::ExecuteDamage(const AActor* Attacker,const AActor* Target)
+{
+    UAttributeComponent* AttackerAttr = Attacker->FindComponentByClass<UAttributeComponent>();
+    UAttributeComponent* TargetAttr = Target->FindComponentByClass<UAttributeComponent>();
+
+    if (!AttackerAttr || !TargetAttr) return;
+
+    //读取攻击方的战斗属性（力量 Strength）
+    float AttackPower = AttackerAttr->GetCombatAttribute().Strength;
+    //读取防守方的战斗属性（物理抗性 PhysicalResistance）
+    float DefensePower = TargetAttr->GetCombatAttribute().PhysicalResistance;
+    //伤害公式（基础公式：伤害 = 攻击力 - 防御力，最小保底 1 点伤害）
+    float FinalDamage = FMath::Max(1.0f, AttackPower - DefensePower);
+    //应用伤害：直接修改对方的当前生命值
+    FBaseAttribute TargetBase = TargetAttr->GetBaseAttribute();
+    TargetBase.CurrentHealth = FMath::Max(0.0f, TargetBase.CurrentHealth - FinalDamage);
+    
+    // 把修改后的结构体重新写回对方的组件中
+    TargetAttr->SetBaseAttribute(TargetBase);
+
+    UE_LOG(LogTemp, Log, TEXT("【战斗结算】%s 攻击了 %s，造成伤害: %f，对方剩余血量: %f"), 
+        *Attacker->GetName(), *Target->GetName(), FinalDamage, TargetBase.CurrentHealth);
+    // 6. 检查死亡
+    if (TargetBase.CurrentHealth <= 0.0f)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("%s 已被击败！"), *Target->GetName());
+        // Target->Destroy(); // 或者触发死亡动画
+    }
 }
 
 

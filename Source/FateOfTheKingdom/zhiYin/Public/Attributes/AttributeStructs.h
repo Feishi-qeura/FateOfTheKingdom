@@ -48,20 +48,24 @@ USTRUCT(BlueprintType)
 struct FATEOFTHEKINGDOM_API FCombatAttribute
 {
 	GENERATED_BODY()
-
+	
+	//力量
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Strength = 10.0f;
-
+	
+	//魔抗
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MagicResistance = 5.0f;
-
+	
+	//物抗
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float PhysicalResistance = 5.0f;
-
+	
+	//闪避
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Dodge = 10.0f;
 	
-
+	//幸运
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Luck = 5.0f;
 };
