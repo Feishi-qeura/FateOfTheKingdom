@@ -24,6 +24,8 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "CharacterState|Combat")
 	void MoveInputWASD(FVector2D Direction);
 	
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+    void TryAttackLookAtTarget(float MaxAttackRangeGrids);
 	
 	UPROPERTY(Transient)
 	UAttributeComponent* OwnerAttributeComp;
@@ -43,5 +45,9 @@ private:
 	// 寻路路径缓存
 	FVector TargetWorldLocation;
 	
+	//能否移动
 	bool IsGridMove(FVector2D Direction,FVector& OutTargetLoc) const;
+	
+	//伤害计算
+	void ExecuteDamage(const AActor* Attacker,const AActor* Target);
 };
