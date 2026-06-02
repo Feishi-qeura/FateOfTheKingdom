@@ -1,5 +1,5 @@
 ﻿#include "CharacterStateComponent.h"
-#include "Attributes/AttributeComponent.h"
+#include "../Public/Attributes/AttributeComponent.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Components/InstancedStaticMeshComponent.h"
