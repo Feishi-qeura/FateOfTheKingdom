@@ -69,3 +69,31 @@ struct FATEOFTHEKINGDOM_API FCombatAttribute
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Luck = 5.0f;
 };
+
+//角色属性枚举转换成结构体
+UENUM(BlueprintType)
+enum  class EAttribute : uint8
+{
+	//最大生命
+	MAXHP,
+	//当前生命
+	HP,
+	//最大行动点
+	MaxActionPoint,
+	//当前行动点
+	CurrentActionPoint,
+	//角色速度
+	Speed,
+	//行动距离
+	MoveRange,
+	//
+	Strength,
+	//
+	MagicResistance,
+	//
+	PhysicalResistance,
+	//
+	Dodge,
+	//
+	Luck
+};

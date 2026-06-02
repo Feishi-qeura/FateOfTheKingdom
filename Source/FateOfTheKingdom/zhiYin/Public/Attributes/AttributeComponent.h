@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Attributes/AttributeStructs.h"
+#include "AttributeStructs.h"
 #include "AttributeComponent.generated.h"
 
 UCLASS(ClassGroup=(Attributes), meta=(BlueprintSpawnableComponent))
@@ -30,4 +30,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Attributes")
 	void SetCombatAttribute(FCombatAttribute Combat) { CombatAttribute = Combat; }
+	
+	//设置角色属性覆盖，Type选择覆盖类型的值，value覆盖值的大小
+	UFUNCTION(BlueprintCallable, Category = "AttributesManager")
+	void SetAttribute(enum EAttribute Type, float Value);
 };
